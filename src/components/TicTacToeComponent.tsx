@@ -24,7 +24,7 @@ export default function TicTacToeComponent() {
   return (
     <div className='flex flex-col gap-2 place-items-center h-screen'>
       <div className='flex-none pt-4 pl-8 self-start'>
-        <p className='text-4xl'>tic tac toe.</p>
+        <p className='text-4xl select-none'>tic tac toe.</p>
       </div>
       <div className='flex flex-wrap h-96 w-96 flex-0'>
         {game.board.cells.map((cell, i) =>
@@ -37,7 +37,7 @@ export default function TicTacToeComponent() {
         )}
       </div>
       <div className='flex-1'>
-        <p className='text-4xl text-center'>{getStateText(game)}</p>
+        <p className='text-4xl select-none text-center'>{getStateText(game)}</p>
         {game.boardState.isEnded && <p className='text-2xl select-none cursor-pointer animate-restartGame text-center' onClick={() => setGame(createDefaultGame())}>click to restart.</p>}
       </div>
     </div>
