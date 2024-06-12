@@ -46,8 +46,7 @@ export default function TicTacToeComponent(props: TicTacToeComponentProps) {
             const newGame = applyMove(game, i, game.turnPlayer);
             setGame(newGame);
             if (newGame === game) return;
-            console.log('YoO');
-            setGame(applyMove(newGame, getAiMove(newGame), aiPlayer));
+            if (props.aiDifficulty !== AiDifficulty.NONE) setGame(applyMove(newGame, getAiMove(newGame), aiPlayer));
           }}>
             <p className='text-6xl select-none'>{cell}</p>
           </div>
