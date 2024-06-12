@@ -26,7 +26,7 @@ function getBorderStyle(index: number): string {
 
 export default function TicTacToeComponent(props: TicTacToeComponentProps) {
   const [game, setGame] = useState<Game>(createDefaultGame());
-  const [aiPlayer, setAiPlayer] = useState<TicTacToeTile>('o');
+  const [aiPlayer] = useState<TicTacToeTile>('o');
 
   function getAiMove(game: Game): number {
     const possiblePositions = Array.from(Array(9).keys()).filter(i => game.board.cells[i] === '');
