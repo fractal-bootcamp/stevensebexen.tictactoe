@@ -54,7 +54,7 @@ export default function TicTacToeComponent(props: TicTacToeComponentProps) {
         
         // Select a best move randomly; they are sorted by minimax value
         const bestMoves = analysisTree.branches.filter(branch => branch.minimaxValue === analysisTree.branches[0].minimaxValue);
-
+        if (bestMoves.length === 0) return;  // This should only happen if analysis runs on a finished game.
         const chosenMove = analysisTree.branches[Math.floor(Math.random() * bestMoves.length)].game.lastMove;
         if (chosenMove === undefined) throw new Error('AI should not be choosing an undefined move.');
         setGame(applyMove(game, chosenMove, aiPlayer));
