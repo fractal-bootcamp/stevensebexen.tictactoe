@@ -16,7 +16,7 @@ export default function TreeBranch(props: TreeBranchComponentProps) {
       </div>
       {showChildren
         && props.branch.branches.map(b =>
-          <TreeBranch branch={b} depth={props.depth + 1} />
+          <TreeBranch key={b.game.lastMove} branch={b} depth={props.depth + 1} />
         )
       }
     </div>

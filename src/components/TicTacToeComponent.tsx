@@ -76,7 +76,7 @@ export default function TicTacToeComponent(props: TicTacToeComponentProps) {
   }, [props.aiDifficulty]);
 
   return (
-    <div className='flex flex-row gap-2 px-2'>
+    <div className='flex flex-col md:flex-row gap-2 px-2'>
       <div className='flex flex-1 flex-col gap-2 place-items-center'>
         <div className='flex flex-wrap h-96 w-96 flex-0'>
           {game.board.cells.map((cell, i) =>
@@ -97,7 +97,7 @@ export default function TicTacToeComponent(props: TicTacToeComponentProps) {
           {props.aiDifficulty === AiDifficulty.IMPOSSIBLE
             && <div className='flex flex-row gap-2'>
                 <input type="checkbox" checked={showAnalysisTree} onChange={() => setShowAnalysisTree(!showAnalysisTree)} />
-                <p>show analysis.</p>
+                <p>show ai thought process.</p>
             </div>
           }
           {game.gameState.isEnded && <p className='text-2xl select-none cursor-pointer animate-restartGame text-center'
@@ -109,8 +109,9 @@ export default function TicTacToeComponent(props: TicTacToeComponentProps) {
       </div>
       { showAnalysisTree
         && <div className='flex flex-col flex-1 gap-0.5'>
+            <p className='text-lg'>ai thought process.</p>
             {analysisTree?.branches.map(branch => 
-              <TreeBranchComponent branch={branch} depth={0} />
+              <TreeBranchComponent key={branch.game.lastMove} branch={branch} depth={0} />
             )}
           </div>
       }
