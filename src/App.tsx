@@ -11,9 +11,8 @@ export enum View {
 
 export enum AiDifficulty {
   NONE,
-  EASY,
-  MEDIUM,
-  HARD
+  POSSIBLE,
+  IMPOSSIBLE
 }
 
 function App() {
@@ -21,14 +20,13 @@ function App() {
   const [aiDifficulty, setAiDifficulty] = useState<AiDifficulty>(AiDifficulty.NONE);
 
   function setGameMode(v: View, d?: AiDifficulty) {
-    if (v === view) return; 
     setView(v);
     setAiDifficulty(d || AiDifficulty.NONE);
   }
 
   return (
     <>
-      <div className='flex flex-col'>
+      <div className='flex flex-col gap-2'>
         <HeaderComponent setGameMode={setGameMode} />
         { (view === View.SOLO || view === View.DUO) && <TicTacToeComponent aiDifficulty={aiDifficulty}/> }
       </div>
