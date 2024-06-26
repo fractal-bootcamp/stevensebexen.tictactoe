@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import './App.css'
-import HeaderComponent from './components/HeaderComponent'
-import TicTacToeComponent from './components/TicTacToeComponent'
+import Header from './components/Header'
+import TicTacToe from './components/TicTacToe'
+import Intro from './components/Intro';
 
 export enum View {
   HOME,
@@ -27,8 +28,9 @@ function App() {
   return (
     <>
       <div className='flex flex-col gap-2'>
-        <HeaderComponent setGameMode={setGameMode} />
-        { (view === View.SOLO || view === View.DUO) && <TicTacToeComponent aiDifficulty={aiDifficulty}/> }
+        <Header setGameMode={setGameMode} />
+        { (view === View.SOLO || view === View.DUO) && <TicTacToe aiDifficulty={aiDifficulty}/> }
+        { (view === View.HOME) && <Intro />}
       </div>
     </>
   )
