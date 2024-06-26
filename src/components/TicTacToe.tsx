@@ -1,32 +1,17 @@
 import { useEffect, useState } from "react";
-import { Game, applyMove, createDefaultGame, getStateText } from "../tictactoe/game";
+import { Game, applyMove, createDefaultGame } from "../tictactoe/game";
 import { TicTacToeTile } from "../tictactoe/board";
 import { AiDifficulty } from "../App";
 import { createAnalysisTree, createGameTree, AnalysisTreeNode } from "../tictactoe/analyzer";
-import TreeBranchComponent from "./TreeBranchComponent";
+import GameBoard from "./GameBoard";
+import StatusBar from "./StatusBar";
+import AnalysisTree from "./AnalysisTree";
 
-interface TicTacToeComponentProps {
+interface TicTacToeProps {
   aiDifficulty: AiDifficulty
 }
 
-function getBorderStyle(index: number): string {
-  const borderWidth = '1px';
-
-  const isLeft = index % 3 === 0;
-  const isRight = index % 3 === 2;
-  const isTop = index <= 2;
-  const isBottom = index >= 6;
-
-  const top = isTop ? '0px' : borderWidth;
-  const right = isRight ? '0px' : borderWidth;
-  const bottom = isBottom ? '0px' : borderWidth;
-  const left = isLeft ? '0px' : borderWidth;
-
-  const borderStyle = [top, right, bottom, left].join(' ');
-  return borderStyle;
-}
-
-export default function TicTacToeComponent(props: TicTacToeComponentProps) {
+export default function TicTacToe(props: TicTacToeProps) {
   const [game, setGame] = useState<Game>(createDefaultGame());
   const [aiPlayer, setAiPlayer] = useState<TicTacToeTile>('o');
   const [analysisTree, setAnalysisTree] = useState<AnalysisTreeNode | undefined>(undefined);  // AI analysis tree for data visualization
@@ -75,45 +60,30 @@ export default function TicTacToeComponent(props: TicTacToeComponentProps) {
     setGame(createDefaultGame());
   }, [props.aiDifficulty]);
 
+  function onCellClicked(pos: number) {
+      if (props.aiDifficulty !== AiDifficulty.NONE && game.turnPlayer === aiPlayer) return;
+      const newGame = applyMove(game, pos, game.turnPlayer);
+      setGame(newGame);
+  }
+
+  function onRestartGame() {
+    setAiPlayer(aiPlayer === 'x' ? 'o' : 'x');
+    setGame(createDefaultGame());
+  }
+
+  function onShowAnalysisTreeInputChanged(): void {
+    setShowAnalysisTree(!showAnalysisTree);
+  }
+
   return (
     <div className='flex flex-col md:flex-row gap-2 px-2'>
       <div className='flex flex-1 flex-col gap-2 place-items-center'>
-        <div className='flex flex-wrap h-96 w-96 flex-0'>
-          {game.board.cells.map((cell, i) =>
-            <div key={i}
-            className='flex h-1/3 flex-none place-items-center place-content-center basis-1/3'
-            style={{ borderWidth: getBorderStyle(i) }}
-            onClick={() => {
-              if (props.aiDifficulty !== AiDifficulty.NONE && game.turnPlayer === aiPlayer) return;
-              const newGame = applyMove(game, i, game.turnPlayer);
-              setGame(newGame);
-            }}>
-              <p className='text-6xl select-none'>{cell}</p>
-            </div>
-          )}
-        </div>
-        <div className='flex flex-1 flex-col items-center'>
-          <p className='text-4xl select-none text-center'>{getStateText(game, props.aiDifficulty === AiDifficulty.NONE ? '' : aiPlayer)}</p>
-          {props.aiDifficulty === AiDifficulty.IMPOSSIBLE
-            && <div className='flex flex-row gap-2'>
-                <input type="checkbox" checked={showAnalysisTree} onChange={() => setShowAnalysisTree(!showAnalysisTree)} />
-                <p>show ai thought process.</p>
-            </div>
-          }
-          {game.gameState.isEnded && <p className='text-2xl select-none cursor-pointer animate-restartGame text-center'
-            onClick={() => {
-              setAiPlayer(aiPlayer === 'x' ? 'o' : 'x');
-              setGame(createDefaultGame());
-            }}>click to restart.</p>}
-        </div>
+        <GameBoard onCellClicked={onCellClicked} game={game} />
+        <StatusBar game={game} aiDifficulty={props.aiDifficulty} onRestartGame={onRestartGame} aiPlayer={aiPlayer}
+          onShowAnalysisTreeInputChanged={onShowAnalysisTreeInputChanged} showAnalysisTree={showAnalysisTree} />
       </div>
-      { showAnalysisTree
-        && <div className='flex flex-col flex-1 gap-0.5'>
-            <p className='text-lg'>ai thought process.</p>
-            {analysisTree?.branches.map(branch => 
-              <TreeBranchComponent key={branch.game.lastMove} branch={branch} depth={0} />
-            )}
-          </div>
+      { showAnalysisTree && props.aiDifficulty === AiDifficulty.IMPOSSIBLE &&
+        <AnalysisTree analysisTree={analysisTree} />
       }
     </div>
   );

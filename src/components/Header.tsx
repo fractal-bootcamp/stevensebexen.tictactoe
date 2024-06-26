@@ -1,12 +1,12 @@
 import { AiDifficulty, View } from "../App"
 
-interface HeaderComponentProps {
+interface HeaderProps {
   setGameMode: (view: View, aiDifficulty?: AiDifficulty) => void
 }
 
-export default function HeaderComponent(props: HeaderComponentProps) {
+export default function Header(props: HeaderProps) {
   return (
-    <div className='flex flex-row flex-none pt-4 md:pl-8 self-start items-end'>
+    <div className='flex flex-row flex-none pt-4 md:pl-8 self-start items-end mb-12'>
       <div className='px-2 md:px-8  hover:bg-purple-200 rounded-md transition-colors duration-200'
         onClick = {() => props.setGameMode(View.HOME)}>
         <p className='text-2xl md:text-4xl select-none'>tic tac toe.</p>
